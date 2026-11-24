@@ -1,0 +1,28 @@
+[Unit]
+Description=IoT gateway status publisher (MQTT)
+# Demarre apres la mise en place du reseau, et s'arrete avant lui :
+# le demon peut encore publier "offline" a l'arret.
+# Il n'attend pas d'adresse IP : il gere lui-meme l'absence de reseau.
+After=network.target
+# Equivalent de "respawn 3600 5 5" de procd :
+# au plus 5 redemarrages par heure, puis abandon.
+StartLimitIntervalSec=3600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/iotd
+# Relance si le demon plante ou est tue (kill -9),
+# mais pas s'il s'arrete normalement (enabled = 0).
+Restart=on-failure
+RestartSec=5
+# stdout et stderr vont dans le journal : journalctl -u iotd
+
+# Durcissement : le demon n'a besoin que de lire sa configuration
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
