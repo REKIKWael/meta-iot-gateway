@@ -13,6 +13,12 @@ BITBAKE_BRANCH=2.18         # version de BitBake associee a wrynose
 LAYER_DIR=$(cd "$(dirname "$0")/.." && pwd)
 WORK_DIR=${1:-$HOME/yocto}
 
+# BitBake refuse de demarrer sans la locale en_US.UTF-8
+if ! locale -a | grep -qi '^en_US\.utf-\?8$'; then
+    echo "Locale en_US.UTF-8 absente : sudo locale-gen en_US.UTF-8" >&2
+    exit 1
+fi
+
 # 1. Sources : BitBake et les couches, chacune dans son propre depot
 mkdir -p "$WORK_DIR/layers"
 cd "$WORK_DIR/layers"

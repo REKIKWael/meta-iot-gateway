@@ -4,8 +4,9 @@ Description=IoT gateway status publisher (MQTT)
 # le demon peut encore publier "offline" a l'arret.
 # Il n'attend pas d'adresse IP : il gere lui-meme l'absence de reseau.
 After=network.target
-# Equivalent de "respawn 3600 5 5" de procd :
-# au plus 5 redemarrages par heure, puis abandon.
+# Proche de "respawn 3600 5 5" de procd : au plus 5 demarrages
+# par heure, puis abandon. Difference : systemd compte tous les
+# demarrages de la periode, procd seulement les plantages rapides.
 StartLimitIntervalSec=3600
 StartLimitBurst=5
 
